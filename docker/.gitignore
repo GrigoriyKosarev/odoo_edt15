@@ -1,0 +1,5 @@
+# Дані PostgreSQL та Odoo (не комітимо)
+data/
+
+# Логи
+*.log
