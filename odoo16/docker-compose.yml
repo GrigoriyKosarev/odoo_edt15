@@ -1,0 +1,55 @@
+# ============================================
+# Docker Compose для Odoo 16
+# ============================================
+#
+# Запуск:    docker compose up -d
+# Зупинка:   docker compose down
+# Логи:      docker compose logs -f
+# Статус:    docker compose ps
+#
+# URL: http://localhost:8070
+#
+
+services:
+
+  # База даних PostgreSQL
+  db:
+    image: postgres:14
+    container_name: odoo16_db
+    environment:
+      - POSTGRES_USER=odoo
+      - POSTGRES_PASSWORD=odoo
+      - POSTGRES_DB=postgres
+      - PGDATA=/var/lib/postgresql/data/pgdata
+    volumes:
+      - ./data/postgres:/var/lib/postgresql/data
+    ports:
+      # Інший порт щоб не конфліктувати з Odoo 15
+      - "5434:5432"
+    restart: unless-stopped
+
+  # Odoo 16
+  odoo:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: gk-odoo:16
+    container_name: odoo16
+    depends_on:
+      - db
+    environment:
+      - HOST=db
+      - USER=odoo
+      - PASSWORD=odoo
+    volumes:
+      - ./addons:/mnt/extra-addons
+      - ./data/odoo:/var/lib/odoo
+    ports:
+      # Інший порт: 8070 (щоб можна було запускати разом з Odoo 15)
+      - "8070:8069"
+      - "8073:8072"
+    restart: unless-stopped
+
+networks:
+  default:
+    name: odoo16_network

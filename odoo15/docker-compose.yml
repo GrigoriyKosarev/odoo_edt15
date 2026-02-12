@@ -1,0 +1,56 @@
+# ============================================
+# Docker Compose для Odoo 15
+# ============================================
+#
+# Запуск:    docker compose up -d
+# Зупинка:   docker compose down
+# Логи:      docker compose logs -f
+# Статус:    docker compose ps
+#
+
+services:
+
+  # База даних PostgreSQL
+  db:
+    image: postgres:14
+    container_name: odoo15_db
+    environment:
+      - POSTGRES_USER=odoo
+      - POSTGRES_PASSWORD=odoo
+      - POSTGRES_DB=postgres
+      - PGDATA=/var/lib/postgresql/data/pgdata
+    volumes:
+      # Дані БД зберігаються локально
+      - ./data/postgres:/var/lib/postgresql/data
+    ports:
+      - "5433:5432"
+    restart: unless-stopped
+
+  # Odoo 15
+  odoo:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: gk-odoo:15
+    container_name: odoo15
+    depends_on:
+      - db
+    environment:
+      - HOST=db
+      - USER=odoo
+      - PASSWORD=odoo
+    volumes:
+      # Кастомні модулі (ваш код)
+      - ./addons:/mnt/extra-addons
+      # Дані Odoo (filestore, sessions)
+      - ./data/odoo:/var/lib/odoo
+    ports:
+      # Веб-інтерфейс
+      - "8069:8069"
+      # Longpolling (live chat)
+      - "8072:8072"
+    restart: unless-stopped
+
+networks:
+  default:
+    name: odoo15_network
