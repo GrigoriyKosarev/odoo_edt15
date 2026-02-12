@@ -1,107 +1,237 @@
 # Odoo Multi-Version Docker Environment
 
-Середовище для розробки модулів Odoo на кількох версіях одночасно.
-
-## Швидкий старт
-
-```bash
-# Перейти в папку docker
-cd docker
-
-# Запустити Odoo 15
-./scripts/odoo.sh start 15
-
-# Або напряму через docker compose
-docker compose --profile odoo15 up -d
-```
-
-## URL-адреси
-
-| Версія | Odoo Web | Порт БД |
-|--------|----------|---------|
-| Odoo 15 | http://localhost:8069 | 5433 |
-| Odoo 16 | http://localhost:8070 | 5434 |
-
-## Команди
-
-### Використання скрипта (рекомендовано)
-
-```bash
-./scripts/odoo.sh start 15       # Запустити Odoo 15
-./scripts/odoo.sh start 16       # Запустити Odoo 16
-./scripts/odoo.sh start all      # Запустити всі версії
-./scripts/odoo.sh stop           # Зупинити все
-./scripts/odoo.sh restart 15     # Перезапустити Odoo 15
-./scripts/odoo.sh logs 15        # Логи Odoo 15
-./scripts/odoo.sh shell 15       # Shell в контейнері
-./scripts/odoo.sh status         # Статус контейнерів
-./scripts/odoo.sh update-module 15 my_library  # Оновити модуль
-```
-
-### Прямі команди docker compose
-
-```bash
-# Режим B: Одна версія за раз
-docker compose --profile odoo15 up -d
-docker compose --profile odoo16 up -d
-
-# Режим A: Всі версії одночасно
-docker compose --profile all up -d
-
-# Зупинити
-docker compose down
-
-# Логи
-docker compose logs -f odoo15
-```
+Середовище для розробки модулів Odoo на версіях 15 та 16.
 
 ## Структура
 
 ```
 docker/
-├── docker-compose.yml    # Головний файл конфігурації
-├── config/
-│   ├── odoo15.conf       # Конфіг Odoo 15
-│   └── odoo16.conf       # Конфіг Odoo 16
-├── scripts/
-│   └── odoo.sh           # Скрипт керування
-└── data/                 # Дані (не комітяться)
-    ├── odoo15/           # Filestore Odoo 15
-    ├── odoo16/           # Filestore Odoo 16
-    ├── postgres15/       # БД Odoo 15
-    └── postgres16/       # БД Odoo 16
+├── odoo15/                    # Odoo 15
+│   ├── Dockerfile             # Рецепт збірки образу
+│   ├── docker-compose.yml     # Конфігурація сервісів
+│   ├── odoo.conf              # Налаштування Odoo
+│   └── data/                  # Дані (автостворюється)
+│       ├── postgres/          # База даних
+│       └── odoo/              # Filestore
+│
+├── odoo16/                    # Odoo 16 (аналогічно)
+│   ├── Dockerfile
+│   ├── docker-compose.yml
+│   ├── odoo.conf
+│   └── data/
+│
+└── README.md
 ```
 
-## Модулі
+## URL-адреси
 
-Всі модулі з кореневої папки проекту автоматично доступні в Odoo:
-- Шлях в контейнері: `/mnt/extra-addons`
-- Наприклад: `my_library`, `dynamic_odoo`
+| Версія | Web | Порт БД |
+|--------|-----|---------|
+| Odoo 15 | http://localhost:8069 | 5433 |
+| Odoo 16 | http://localhost:8070 | 5434 |
 
-## Перше налаштування
+---
 
-1. Запустіть Odoo: `./scripts/odoo.sh start 15`
-2. Відкрийте http://localhost:8069
-3. Створіть базу даних:
-   - Master Password: `admin`
-   - Database Name: `odoo15_dev`
-   - Email: ваш email
-   - Password: ваш пароль
-4. Активуйте режим розробника: Settings → Activate Developer Mode
-5. Оновіть список модулів: Apps → Update Apps List
-6. Знайдіть та встановіть `my_library`
+## Швидкий старт
 
-## Оновлення модуля після змін
+### Запуск Odoo 15
 
 ```bash
-# Через скрипт
-./scripts/odoo.sh update-module 15 my_library
+# 1. Перейти в папку odoo15
+cd docker/odoo15
 
-# Або вручну
-docker compose exec odoo15 odoo -c /etc/odoo/odoo.conf -u my_library --stop-after-init
+# 2. Зібрати образ та запустити
+docker compose up -d
+
+# 3. Відкрити браузер
+# http://localhost:8069
+```
+
+### Запуск Odoo 16
+
+```bash
+# 1. Перейти в папку odoo16
+cd docker/odoo16
+
+# 2. Зібрати образ та запустити
+docker compose up -d
+
+# 3. Відкрити браузер
+# http://localhost:8070
+```
+
+---
+
+## Команди Docker Compose (детально)
+
+### Запуск
+
+```bash
+# Запустити у фоновому режимі (-d = detached)
+docker compose up -d
+
+# Запустити та показувати логи (без -d)
+docker compose up
+
+# Перезібрати образ якщо змінився Dockerfile
+docker compose up -d --build
+```
+
+### Зупинка
+
+```bash
+# Зупинити контейнери (дані зберігаються)
+docker compose stop
+
+# Зупинити та видалити контейнери
+docker compose down
+
+# Видалити контейнери + volumes (ВИДАЛИТЬ ДАНІ!)
+docker compose down -v
+```
+
+### Моніторинг
+
+```bash
+# Статус контейнерів
+docker compose ps
+
+# Логи всіх сервісів
+docker compose logs
+
+# Логи конкретного сервісу
+docker compose logs odoo15
+docker compose logs db15
+
+# Логи в реальному часі (-f = follow)
+docker compose logs -f odoo15
+
+# Останні 100 рядків логів
+docker compose logs --tail 100 odoo15
+```
+
+### Робота з контейнерами
+
+```bash
+# Зайти в контейнер Odoo
+docker compose exec odoo15 bash
+
+# Зайти в контейнер PostgreSQL
+docker compose exec db15 bash
+
+# Виконати команду в контейнері
+docker compose exec odoo15 odoo --version
+
+# Перезапустити сервіс
 docker compose restart odoo15
 ```
 
-## Додавання нових версій (17, 18)
+---
 
-Додайте в `docker-compose.yml` аналогічні секції для db17/odoo17 та db18/odoo18.
+## Оновлення модуля
+
+Після зміни коду Python потрібно оновити модуль:
+
+```bash
+# Спосіб 1: Через odoo команду
+docker compose exec odoo15 odoo -c /etc/odoo/odoo.conf -u my_library --stop-after-init
+docker compose restart odoo15
+
+# Спосіб 2: Через інтерфейс
+# Apps → my_library → Upgrade
+```
+
+Зміни в XML/JS/CSS застосовуються після оновлення сторінки (Ctrl+Shift+R).
+
+---
+
+## Перше налаштування Odoo
+
+1. Відкрийте http://localhost:8069
+2. Створіть базу даних:
+   - **Master Password:** `admin`
+   - **Database Name:** `odoo15_dev`
+   - **Email:** `admin@example.com`
+   - **Password:** ваш пароль
+3. Активуйте режим розробника:
+   - URL: `http://localhost:8069/web?debug=1`
+   - Або: Settings → Activate Developer Mode
+4. Оновіть список модулів:
+   - Apps → меню ☰ → Update Apps List
+5. Встановіть модуль:
+   - Видаліть фільтр "Apps"
+   - Знайдіть `my_library`
+   - Натисніть Install
+
+---
+
+## Робота з образами
+
+```bash
+# Подивитися локальні образи
+docker images
+
+# Завантажити образ з Docker Hub (без запуску)
+docker pull odoo:15
+docker pull postgres:14
+
+# Видалити образ
+docker rmi my-odoo:15
+
+# Перезібрати образ
+docker compose build
+
+# Перезібрати без кешу (якщо щось зламалось)
+docker compose build --no-cache
+```
+
+---
+
+## Підключення до БД
+
+```bash
+# Через psql в контейнері
+docker compose exec db15 psql -U odoo -d odoo15_dev
+
+# Через зовнішній клієнт (DBeaver, pgAdmin)
+# Host: localhost
+# Port: 5433 (для Odoo 15) або 5434 (для Odoo 16)
+# User: odoo
+# Password: odoo
+```
+
+---
+
+## Можливі проблеми
+
+### Порт зайнятий
+
+```
+Error: Bind for 0.0.0.0:8069 failed: port is already allocated
+```
+
+Рішення: Змініть порт в docker-compose.yml або зупиніть інший сервіс.
+
+### Не вистачає місця
+
+```bash
+# Очистити невикористані дані Docker
+docker system prune -a
+```
+
+### Модуль не видно
+
+1. Перевірте що Developer Mode активний
+2. Apps → Update Apps List
+3. Видаліть фільтр "Apps" в пошуку
+
+### Зміни не застосовуються
+
+```bash
+# Перезібрати образ
+docker compose up -d --build
+
+# Або повністю перестворити
+docker compose down
+docker compose up -d --build
+```
