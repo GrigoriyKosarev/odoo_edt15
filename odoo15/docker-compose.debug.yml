@@ -1,0 +1,29 @@
+# ============================================
+# Docker Compose для Odoo 15 - DEBUG режим
+# ============================================
+#
+# Використання:
+#   docker compose -f docker-compose.yml -f docker-compose.debug.yml up -d
+#
+# ВАЖЛИВО: Порядок запуску
+#   1. Спочатку запустити Debug Server в PyCharm (кнопка Debug)
+#   2. Потім запустити Docker: docker compose -f docker-compose.yml -f docker-compose.debug.yml up
+#   3. Контейнер підключиться до PyCharm автоматично
+#
+# PyCharm налаштування:
+#   Run → Edit Configurations → + → Python Debug Server
+#   IDE host name: localhost
+#   Port: 5678
+#   Path mappings: /mnt/extra-addons → /home/user/odoo_edt15/odoo15/addons
+#
+
+services:
+  odoo:
+    # Для Linux: host.docker.internal не працює за замовчуванням
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    command: >
+      python3 -m debugpy
+      --connect host.docker.internal:5678
+      /usr/bin/odoo
+      -c /etc/odoo/odoo.conf
