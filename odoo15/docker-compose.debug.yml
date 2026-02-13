@@ -3,18 +3,15 @@
 # ============================================
 #
 # Використання:
-#   docker compose -f docker-compose.yml -f docker-compose.debug.yml up -d
-#
-# ВАЖЛИВО: Порядок запуску
-#   1. Спочатку запустити Debug Server в PyCharm (кнопка Debug)
-#   2. Потім запустити Docker: docker compose -f docker-compose.yml -f docker-compose.debug.yml up
-#   3. Контейнер підключиться до PyCharm автоматично
+#   1. Перезбудувати образ: docker compose build
+#   2. Запустити Debug Server в PyCharm (кнопка Debug)
+#   3. Запустити: docker compose -f docker-compose.yml -f docker-compose.debug.yml up
 #
 # PyCharm налаштування:
 #   Run → Edit Configurations → + → Python Debug Server
 #   IDE host name: localhost
 #   Port: 5678
-#   Path mappings: /mnt/extra-addons → /home/user/odoo_edt15/odoo15/addons
+#   Path mappings: /mnt/extra-addons → <ваш шлях>/odoo15/addons
 #
 
 services:
@@ -23,7 +20,9 @@ services:
     extra_hosts:
       - "host.docker.internal:host-gateway"
     command: >
-      python3 -m debugpy
-      --connect host.docker.internal:5678
-      /usr/bin/odoo
-      -c /etc/odoo/odoo.conf
+      python3 -c "
+      import pydevd_pycharm;
+      pydevd_pycharm.settrace('host.docker.internal', port=5678, stdoutToServer=True, stderrToServer=True, suspend=False);
+      import runpy;
+      runpy.run_path('/usr/bin/odoo', run_name='__main__')
+      " -c /etc/odoo/odoo.conf

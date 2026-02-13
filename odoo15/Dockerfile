@@ -21,7 +21,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # Додаткові Python пакети
 RUN pip3 install --no-cache-dir \
     debugpy \
-    ipython
+    ipython \
+    pydevd-pycharm
 
 # Копіюємо конфігурацію
 COPY ./odoo.conf /etc/odoo/odoo.conf
