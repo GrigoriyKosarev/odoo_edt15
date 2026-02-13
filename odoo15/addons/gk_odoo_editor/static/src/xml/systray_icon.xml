@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    systray_icon.xml — QWeb шаблон для кнопки в systray
+    ==========================================================================
+
+    ЩО ТАКЕ SYSTRAY:
+      Systray — це панель іконок у верхньому правому куті Odoo.
+      Там є іконки повідомлень, активності, і т.д.
+      Ми додаємо свою іконку для запуску Editor.
+
+    ЩО ТАКЕ QWeb:
+      QWeb — шаблонізатор Odoo. Працює і на сервері (Python) і на клієнті (JS).
+      В JavaScript шаблони використовуються через: template: "НазваШаблону"
+
+    ПОРІВНЯЙ З dynamic_odoo:
+      В dynamic_odoo template називається "Studio.Icon"
+      У нас — "GkEditor.SystrayIcon"
+-->
+<templates>
+
+    <!-- Іконка в systray — кнопка для запуску Editor -->
+    <t t-name="GkEditor.SystrayIcon">
+        <div class="gk-editor-systray d-flex align-items-center"
+             title="GK Editor">
+            <!-- fa-pencil-square-o — іконка з FontAwesome (вбудовано в Odoo) -->
+            <i class="fa fa-pencil-square-o fa-lg" style="cursor: pointer;"/>
+        </div>
+    </t>
+
+    <!-- Панель Editor яка з'явиться при натисканні -->
+    <t t-name="GkEditor.Panel">
+        <div class="gk-editor-panel p-3">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h4 class="mb-0">GK Editor</h4>
+                <button class="btn btn-sm btn-outline-secondary gk-editor-close">
+                    <i class="fa fa-times"/>
+                </button>
+            </div>
+            <div class="gk-editor-content">
+                <p class="text-muted">
+                    Editor активний. Поточна модель:
+                    <strong class="gk-editor-model-name">—</strong>
+                </p>
+                <div class="gk-editor-info mt-2">
+                    <!-- Тут буде інформація про поточний view -->
+                </div>
+            </div>
+        </div>
+    </t>
+
+</templates>

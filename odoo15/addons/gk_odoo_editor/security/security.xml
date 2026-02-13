@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    security.xml — Група доступу для GK Editor
+    ==========================================================================
+
+    ЩО ЦЕ:
+      Створюємо групу (res.groups) яка контролює доступ до редактора.
+      Тільки користувачі з цією групою бачитимуть кнопку Editor.
+
+    ЯК ЦЕ ПРАЦЮЄ:
+      <record id="..." model="res.groups"> — створює запис у таблиці res_groups
+      id="group_gk_editor" — XML ID (унікальний ідентифікатор)
+      Повний шлях: gk_odoo_editor.group_gk_editor (модуль.id)
+
+    ПОРІВНЯЙ З dynamic_odoo:
+      dynamic_odoo/security/view_dynamic_security.xml:
+      <record id="group_dynamic" model="res.groups">
+          <field name="name">Odoo Studio</field>
+      </record>
+
+    КАТЕГОРІЯ:
+      implied_ids — автоматично додає цю групу всім з base.group_user
+      Це означає що всі внутрішні користувачі матимуть доступ.
+      Пізніше можна прибрати implied_ids щоб давати доступ вибірково.
+
+    noupdate="0" означає що при оновленні модуля запис буде перезаписаний.
+-->
+<odoo>
+    <data noupdate="0">
+        <record id="group_gk_editor" model="res.groups">
+            <field name="name">GK Odoo Editor</field>
+            <field name="comment">
+                Доступ до візуального редактора views та моделей.
+            </field>
+            <!-- Автоматично додати всім внутрішнім користувачам -->
+            <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+        </record>
+    </data>
+</odoo>

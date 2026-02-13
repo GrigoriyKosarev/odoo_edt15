@@ -1,0 +1,56 @@
+// =============================================================================
+// editor.scss — Стилі для GK Editor
+// =============================================================================
+//
+// SCSS — це CSS з додатковими можливостями:
+//   - Змінні: $color-primary: #7c7bad;
+//   - Вкладеність: .parent { .child { ... } }
+//   - Міксіни: @mixin та @include
+//
+// Odoo компілює SCSS в CSS автоматично.
+//
+
+// Змінні
+$gk-editor-primary: #7c7bad;
+$gk-editor-bg: #f8f9fa;
+$gk-editor-panel-width: 400px;
+
+// Іконка в systray
+.gk-editor-systray {
+  padding: 0 8px;
+  cursor: pointer;
+
+  .fa {
+    transition: color 0.2s ease;
+  }
+
+  &:hover .fa {
+    color: $gk-editor-primary;
+  }
+}
+
+// Панель Editor (бічна)
+.gk-editor-panel {
+  position: fixed;
+  top: 46px;  // висота Odoo navbar
+  right: 0;
+  width: $gk-editor-panel-width;
+  height: calc(100vh - 46px);
+  background: white;
+  border-left: 2px solid $gk-editor-primary;
+  box-shadow: -2px 0 8px rgba(0, 0, 0, 0.1);
+  z-index: 1050;
+  overflow-y: auto;
+
+  h4 {
+    color: $gk-editor-primary;
+  }
+
+  .table {
+    font-size: 0.85rem;
+
+    code {
+      color: #e83e8c;
+    }
+  }
+}
