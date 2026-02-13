@@ -19,4 +19,4 @@ services:
     # Для Linux: host.docker.internal не працює за замовчуванням
     extra_hosts:
       - "host.docker.internal:host-gateway"
-    command: ["python3", "-c", "import pydevd_pycharm; pydevd_pycharm.settrace('host.docker.internal', port=5678, stdoutToServer=True, stderrToServer=True, suspend=False); import runpy; runpy.run_path('/usr/bin/odoo', run_name='__main__')"]
+    command: ["python3", "-c", "import pydevd_pycharm; pydevd_pycharm.settrace('host.docker.internal', port=5678, suspend=False); import runpy; runpy.run_path('/usr/bin/odoo', run_name='__main__')"]
