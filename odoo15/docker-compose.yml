@@ -49,8 +49,13 @@ services:
       - "8069:8069"
       # Longpolling (live chat)
       - "8072:8072"
+      # Debug
+      - "5678:5678"
     restart: unless-stopped
-
+    command: >
+      python3 -m debugpy --listen 0.0.0.0:5678 --wait-for-client
+      /usr/bin/odoo
+      --workers=0
 networks:
   default:
     name: odoo15_network
