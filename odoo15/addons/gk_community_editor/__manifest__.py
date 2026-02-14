@@ -14,12 +14,12 @@
 #   Ми поки залежимо тільки від 'base' — мінімум для старту
 #
 {
-    'name': 'GK Odoo Editor',
-    'summary': 'Visual editor for Odoo views and models',
+    'name': 'Community Editor for Odoo',
+    'summary': 'Visual editor for Odoo views and models (Community Edition)',
     'version': '15.0.1.0.0',
     'category': 'Tools',
     'description': """
-        GK Odoo Editor — візуальний редактор views та моделей Odoo.
+        Community Editor for Odoo — візуальний редактор views та моделей.
         Натхненний Odoo Studio / dynamic_odoo.
     """,
     'author': 'Grigoriy Kosarev',
@@ -55,11 +55,11 @@
     #
     'assets': {
         'web.assets_backend': [
-            'gk_odoo_editor/static/src/scss/editor.scss',
-            'gk_odoo_editor/static/src/js/systray_icon.js',
+            'gk_community_editor/static/src/scss/editor.scss',
+            'gk_community_editor/static/src/js/systray_icon.js',
         ],
         'web.assets_qweb': [
-            'gk_odoo_editor/static/src/xml/systray_icon.xml',
+            'gk_community_editor/static/src/xml/systray_icon.xml',
         ],
     },
 
