@@ -21,7 +21,7 @@
 //      SystrayMenu.Items.push(MyWidget) — додає іконку
 //
 //   4. session — дані сесії з сервера (те що повертає session_info())
-//      session['showGkEditor'] — наш прапорець з ir_http.py
+//      session['showCommunityEditor'] — наш прапорець з ir_http.py
 //
 // ПОРІВНЯЙ З dynamic_odoo:
 //   dynamic_odoo/static/src/js/studio/menus/systray_menu_studio.js:
@@ -180,7 +180,7 @@ var GkEditorSystray = Widget.extend({
 // =============================================================================
 // Реєстрація в SystrayMenu
 // =============================================================================
-// Перевіряємо session['showGkEditor'] — чи є доступ у користувача
+// Перевіряємо session['showCommunityEditor'] — чи є доступ у користувача
 // sequence — визначає порядок іконки (менше = лівіше)
 //
 // ПОРІВНЯЙ З dynamic_odoo:
@@ -189,7 +189,7 @@ var GkEditorSystray = Widget.extend({
 //       SystrayMenu.Items.push(StudioMode);
 //   }
 //
-if (session['showGkEditor']) {
+if (session['showCommunityEditor']) {
     GkEditorSystray.prototype.sequence = 1;
     SystrayMenu.Items.push(GkEditorSystray);
 }

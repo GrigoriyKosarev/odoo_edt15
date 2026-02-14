@@ -10,7 +10,7 @@
     ЯК ЦЕ ПРАЦЮЄ:
       <record id="..." model="res.groups"> — створює запис у таблиці res_groups
       id="group_gk_editor" — XML ID (унікальний ідентифікатор)
-      Повний шлях: gk_odoo_editor.group_gk_editor (модуль.id)
+      Повний шлях: gk_community_editor.group_gk_editor (модуль.id)
 
     ПОРІВНЯЙ З dynamic_odoo:
       dynamic_odoo/security/view_dynamic_security.xml:
@@ -28,7 +28,7 @@
 <odoo>
     <data noupdate="0">
         <record id="group_gk_editor" model="res.groups">
-            <field name="name">GK Odoo Editor</field>
+            <field name="name">Community Editor for Odoo</field>
             <field name="comment">
                 Доступ до візуального редактора views та моделей.
             </field>

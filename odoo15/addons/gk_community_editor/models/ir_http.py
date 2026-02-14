@@ -9,9 +9,9 @@
 #   Ці дані доступні в JavaScript через: const session = require('web.session');
 #
 # ЩО МИ РОБИМО:
-#   Додаємо 'showGkEditor': True до session_info якщо користувач
-#   належить до групи 'gk_odoo_editor.group_gk_editor'.
-#   В JavaScript перевіряємо session['showGkEditor'] щоб показати кнопку.
+#   Додаємо 'showCommunityEditor': True до session_info якщо користувач
+#   належить до групи 'gk_community_editor.group_gk_editor'.
+#   В JavaScript перевіряємо session['showCommunityEditor'] щоб показати кнопку.
 #
 # ЯК ЦЕ ПРАЦЮЄ В dynamic_odoo:
 #   dynamic_odoo/models/ir_http.py робить те саме:
@@ -29,9 +29,9 @@ class Http(models.AbstractModel):
     _inherit = 'ir.http'
 
     def session_info(self):
-        """Додаємо showGkEditor до даних сесії."""
+        """Додаємо showCommunityEditor до даних сесії."""
         result = super().session_info()
         # Перевіряємо чи користувач має право на GK Editor
-        if self.env.user.has_group('gk_odoo_editor.group_gk_editor'):
-            result['showGkEditor'] = True
+        if self.env.user.has_group('gk_community_editor.group_gk_editor'):
+            result['showCommunityEditor'] = True
         return result

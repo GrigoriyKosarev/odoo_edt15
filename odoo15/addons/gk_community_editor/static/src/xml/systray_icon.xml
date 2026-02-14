@@ -21,7 +21,7 @@
     <!-- Іконка в systray — кнопка для запуску Editor -->
     <t t-name="GkEditor.SystrayIcon">
         <div class="gk-editor-systray d-flex align-items-center"
-             title="GK Editor">
+             title="Community Editor">
             <!-- fa-pencil-square-o — іконка з FontAwesome (вбудовано в Odoo) -->
             <i class="fa fa-pencil-square-o fa-lg" style="cursor: pointer;"/>
         </div>
@@ -31,7 +31,7 @@
     <t t-name="GkEditor.Panel">
         <div class="gk-editor-panel p-3">
             <div class="d-flex justify-content-between align-items-center mb-3">
-                <h4 class="mb-0">GK Editor</h4>
+                <h4 class="mb-0">Community Editor</h4>
                 <button class="btn btn-sm btn-outline-secondary gk-editor-close">
                     <i class="fa fa-times"/>
                 </button>
